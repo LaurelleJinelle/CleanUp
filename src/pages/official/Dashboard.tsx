@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { HomeIcon, UsersIcon, ClipboardListIcon, AlertCircleIcon, UserIcon } from "lucide-react";
 import Sidebar from "../../components/layout/Sidebar";
@@ -8,6 +8,7 @@ import Workers from "./Workers";
 import TaskManagement from "./TaskManagement";
 import Reports from "./Reports";
 import Profile from "./Profile";
+
 const OfficialDashboard = ({
   user,
   onLogout
@@ -34,6 +35,9 @@ const OfficialDashboard = ({
     icon: <UserIcon size={18} />,
     path: "/official/profile"
   }];
+  useEffect(()=>{
+    console.log(user)
+  }, [])
   const getTitle = path => {
     const item = sidebarItems.find(item => item.path === path);
     return item ? item.label : "Dashboard";

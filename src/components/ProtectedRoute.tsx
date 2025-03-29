@@ -1,16 +1,27 @@
-import React from "react";
 import { Navigate } from "react-router-dom";
-const ProtectedRoute = ({
-  children,
-  user,
-  role
-}) => {
-  if (!user) {
-    return <Navigate to="/login" replace />;
+import { useAuth } from "../context/AuthContext";
+
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  requiredRole?: string | null;
+}
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, requiredRole = null }) => {
+  const { currentUser, loading } = useAuth();
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-screen">Loading...</div>;
   }
-  if (user.role !== role) {
-    return <Navigate to={`/${user.role}`} replace />;
+
+  if (!currentUser) {
+    return <Navigate to="/login" />;
   }
-  return children;
+
+  if (requiredRole && currentUser.role !== requiredRole) {
+    return <Navigate to="/" />;
+  }
+
+  return <>{children}</>;
 };
+
 export default ProtectedRoute;

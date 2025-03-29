@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { BellIcon, MenuIcon, XIcon } from "lucide-react";
 import { toast } from "sonner";
 const Navbar = ({
@@ -83,7 +83,7 @@ const Navbar = ({
               <div className="flex items-center space-x-3">
                 <div className="text-right hidden sm:block">
                   <div className="text-sm font-medium text-gray-800">
-                    {user.name}
+                    {user.displayName}
                   </div>
                   <div className="text-xs text-gray-500 capitalize">
                     {user.role}
@@ -91,7 +91,7 @@ const Navbar = ({
                 </div>
                 <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
                   <span className="text-sm font-medium">
-                    {user.name.charAt(0)}
+                    {user.displayName?.charAt(0)}
                   </span>
                 </div>
               </div>

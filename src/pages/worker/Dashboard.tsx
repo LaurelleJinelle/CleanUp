@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { HomeIcon, MapIcon, CheckSquareIcon, UserIcon } from "lucide-react";
 import Sidebar from "../../components/layout/Sidebar";

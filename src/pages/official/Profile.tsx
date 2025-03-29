@@ -14,7 +14,7 @@ const Profile = ({
             <UserIcon className="h-8 w-8" />
           </div>
           <div className="ml-4">
-            <h3 className="text-xl font-medium text-gray-900">{user.name}</h3>
+            <h3 className="text-xl font-medium text-gray-900">{user.displayName}</h3>
             <p className="text-gray-500 capitalize">{user.role}</p>
           </div>
         </div>

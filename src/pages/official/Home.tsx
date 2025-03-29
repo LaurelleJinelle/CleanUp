@@ -1,52 +1,67 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { UsersIcon, ClipboardListIcon, AlertCircleIcon, TruckIcon, BarChart2Icon, ArrowRightIcon, CheckCircleIcon, XCircleIcon } from "lucide-react";
-const OfficialHome = ({
-  user
-}) => {
-  const stats = [{
-    id: 1,
-    name: "Active Workers",
-    value: "24",
-    icon: <UsersIcon className="h-6 w-6 text-blue-500" />
-  }, {
-    id: 2,
-    name: "Tasks Today",
-    value: "56",
-    icon: <ClipboardListIcon className="h-6 w-6 text-blue-500" />
-  }, {
-    id: 3,
-    name: "Open Reports",
-    value: "8",
-    icon: <AlertCircleIcon className="h-6 w-6 text-blue-500" />
-  }, {
-    id: 4,
-    name: "Active Vehicles",
-    value: "18",
-    icon: <TruckIcon className="h-6 w-6 text-blue-500" />
-  }];
-  const recentReports = [{
-    id: 1,
-    type: "Missed Collection",
-    location: "Central District",
-    status: "Pending",
-    date: "10 minutes ago",
-    priority: "High"
-  }, {
-    id: 2,
-    type: "Illegal Dumping",
-    location: "North Park",
-    status: "In Progress",
-    date: "1 hour ago",
-    priority: "Medium"
-  }, {
-    id: 3,
-    type: "Damaged Bin",
-    location: "Westside Residential",
-    status: "Resolved",
-    date: "3 hours ago",
-    priority: "Low"
-  }];
+import { db, collection, getDocs } from "../../firebase-config";
+import {
+  UsersIcon,
+  ClipboardListIcon,
+  AlertCircleIcon,
+  TruckIcon,
+  BarChart2Icon,
+  ArrowRightIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+} from "lucide-react";
+
+const OfficialHome = ({ user }) => {
+  const [recentReports, setRecentReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "reports"));
+        const reportsData = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setRecentReports(reportsData);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  const stats = [
+    {
+      id: 1,
+      name: "Active Workers",
+      value: "24",
+      icon: <UsersIcon className="h-6 w-6 text-blue-500" />,
+    },
+    {
+      id: 2,
+      name: "Tasks Today",
+      value: "56",
+      icon: <ClipboardListIcon className="h-6 w-6 text-blue-500" />,
+    },
+    {
+      id: 3,
+      name: "Open Reports",
+      value: recentReports.length.toString(),
+      icon: <AlertCircleIcon className="h-6 w-6 text-blue-500" />,
+    },
+    {
+      id: 4,
+      name: "Active Vehicles",
+      value: "18",
+      icon: <TruckIcon className="h-6 w-6 text-blue-500" />,
+    },
+  ];
+
   const workerPerformance = [{
     id: 1,
     name: "John Smith",
@@ -68,7 +83,8 @@ const OfficialHome = ({
     tasksCompleted: 9,
     efficiency: 97
   }];
-  const getStatusColor = status => {
+
+  const getStatusColor = (status) => {
     switch (status) {
       case "Resolved":
         return "bg-green-100 text-green-800";
@@ -80,7 +96,8 @@ const OfficialHome = ({
         return "bg-gray-100 text-gray-800";
     }
   };
-  const getPriorityColor = priority => {
+
+  const getPriorityColor = (priority) => {
     switch (priority) {
       case "High":
         return "text-red-600";
@@ -95,7 +112,7 @@ const OfficialHome = ({
   return <div className="max-w-7xl mx-auto">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800">
-          Welcome, {user.name}
+          Welcome, {user.displayName}
         </h2>
         <p className="text-gray-600">
           Here's an overview of your waste management operations.

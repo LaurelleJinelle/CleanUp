@@ -41,7 +41,7 @@ const ResidentHome = ({
   return <div className="max-w-7xl mx-auto">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800">
-          Welcome back, {user.name}!
+          Welcome back, {user.displayName}!
         </h2>
         <p className="text-gray-600">
           Here's what's happening with your waste management.

@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { RecycleIcon } from "lucide-react";
 const Sidebar = ({
@@ -16,7 +15,7 @@ const Sidebar = ({
       </div>
       <div className="p-4 border-b border-blue-600">
         <div className="text-sm opacity-75">Logged in as</div>
-        <div className="font-semibold">{user.name}</div>
+        <div className="font-semibold">{user.displayName}</div>
         <div className="text-sm opacity-75 capitalize">{user.role}</div>
       </div>
       <nav className="flex-1 overflow-y-auto py-4">

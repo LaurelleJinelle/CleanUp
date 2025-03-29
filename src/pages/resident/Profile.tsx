@@ -70,7 +70,7 @@ const Profile = ({
               </div>
               <div className="ml-4">
                 <h3 className="text-xl font-medium text-gray-900">
-                  {user.name}
+                  {user.displayName}
                 </h3>
                 <p className="text-gray-500 capitalize">{user.role}</p>
               </div>
@@ -165,7 +165,7 @@ const Profile = ({
                 </div>
               </form> : <div className="space-y-6">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  <ProfileField icon={<UserIcon className="h-5 w-5 text-gray-400" />} label="Full Name" value={user.name} />
+                  <ProfileField icon={<UserIcon className="h-5 w-5 text-gray-400" />} label="Full Name" value={user.displayName} />
                   <ProfileField icon={<MailIcon className="h-5 w-5 text-gray-400" />} label="Email Address" value={user.email} />
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

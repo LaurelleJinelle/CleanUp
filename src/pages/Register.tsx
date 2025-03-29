@@ -1,12 +1,15 @@
-import React, { useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { RecycleIcon, UserIcon, MailIcon, KeyIcon, MapPinIcon } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from "../context/AuthContext";
+
 const Register = ({
   onRegister,
   user
 }) => {
   const navigate = useNavigate();
+    const { register, loginWithGoogle} = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -14,17 +17,14 @@ const Register = ({
     confirmPassword: "",
     role: "resident",
     location: ""
-  });
-  if (user) {
-    return <Navigate to={`/${user.role}`} replace />;
-  }
+  })
   const handleChange = e => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match");
@@ -38,6 +38,7 @@ const Register = ({
       role: formData.role,
       location: formData.location
     };
+    await register(formData.name, formData.email, formData.password, formData.role)
     toast.success("Registration successful!");
     onRegister(newUser);
     navigate(`/${formData.role}`);
@@ -133,6 +134,24 @@ const Register = ({
                 Log in
               </Link>
             </p>
+          </div>
+
+          <div className="mt-4">
+            <button
+              type="button"
+              onClick={loginWithGoogle}
+              className="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <span className="flex items-center">
+                <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24">
+                  <path
+                    d="M12.545 10.239v3.821h5.445c-0.712 2.315-2.647 3.972-5.445 3.972-3.332 0-6.033-2.701-6.033-6.032s2.701-6.032 6.033-6.032c1.498 0 2.866 0.549 3.921 1.453l2.814-2.814c-1.798-1.677-4.198-2.707-6.735-2.707-5.523 0-10 4.477-10 10s4.477 10 10 10c8.396 0 10-7.326 10-12.234 0-0.598-0.066-1.170-0.162-1.734h-9.838z"
+                    fill="#4285F4"
+                  />
+                </svg>
+                Sign in with Google
+              </span>
+            </button>
           </div>
         </div>
       </div>

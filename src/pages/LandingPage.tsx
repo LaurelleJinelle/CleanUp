@@ -1,12 +1,11 @@
-import React from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { TrashIcon, RecycleIcon, UsersIcon } from "lucide-react";
 const LandingPage = ({
   user
 }) => {
-  if (user) {
-    return <Navigate to={`/${user.role}`} replace />;
-  }
+  // if (user) {
+  //   return <Navigate to={`/${user.role}`} replace />;
+  // }
   return <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-blue-600 shadow-md">
@@ -17,7 +16,7 @@ const LandingPage = ({
           </div>
           <div className="space-x-4">
             <Link to="/login" className="text-white hover:text-blue-100">
-              Login
+              Sign In
             </Link>
             <Link to="/register" className="bg-white text-blue-600 px-4 py-2 rounded-md hover:bg-blue-50">
               Register

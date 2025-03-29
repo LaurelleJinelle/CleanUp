@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { AlertCircleIcon, MapPinIcon, CameraIcon, SendIcon } from "lucide-react";
 import { toast } from "sonner";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { db, collection, addDoc } from "../../firebase-config";
+
 const Reports = () => {
   const [formData, setFormData] = useState({
     type: "",
@@ -48,21 +51,40 @@ const Reports = () => {
       reader.readAsDataURL(file);
     }
   };
-  const handleSubmit = e => {
+
+  const storage = getStorage();
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
-    // Simulate API call
-    setTimeout(() => {
-      toast.success("Your report has been submitted successfully!");
-      setFormData({
-        type: "",
-        location: "",
-        description: "",
-        image: null
-      });
+  
+    try {
+      let imageUrl = null;
+  
+      if (formData.image) {
+        const storageRef = ref(storage, `reports/${Date.now()}_${formData.image.name}`);
+        await uploadBytes(storageRef, formData.image);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+  
+      const reportData = {
+        type: formData.type,
+        location: formData.location,
+        description: formData.description,
+        imageUrl: imageUrl || null,
+        timestamp: new Date(),
+      };
+  
+      await addDoc(collection(db, "reports"), reportData);
+      
+      setFormData({ type: "", location: "", description: "", image: null });
       setPreview(null);
+      toast.success("Your report has been submitted successfully!");
+    } catch (error) {
+      toast.error("Failed to submit report. Please try again.");
+      console.error("Error submitting report:", error);
+    } finally {
       setSubmitting(false);
-    }, 1500);
+    }
   };
   const recentReports = [{
     id: 1,
