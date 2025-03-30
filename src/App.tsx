@@ -30,6 +30,8 @@ export function App() {
     localStorage.setItem("wasteManagementUser", JSON.stringify(userData));
     setUser(userData);
   };
+
+  
   return <BrowserRouter>
     <AuthProvider>
       <div className="min-h-screen bg-gray-50">

@@ -1,11 +1,29 @@
 import { Link, useLocation } from "react-router-dom";
 import { RecycleIcon } from "lucide-react";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 const Sidebar = ({
   items,
   user,
   onLogout
 }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      toast.success("Logged out successfully!");
+      navigate("/"); // Redirect to Landing Page
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast.error("Something went wrong, please try again.");
+    }
+  };
+
   return <div className="w-64 bg-blue-700 text-white h-screen flex flex-col">
       <div className="p-4 border-b border-blue-600">
         <Link to="/" className="flex items-center space-x-2">
@@ -29,7 +47,7 @@ const Sidebar = ({
         </ul>
       </nav>
       <div className="p-4 border-t border-blue-600">
-        <button onClick={onLogout} className="w-full text-left px-4 py-2 text-blue-100 hover:bg-blue-600 rounded-md transition-colors">
+        <button onClick={handleLogout} className="w-full text-left px-4 py-2 text-blue-100 hover:bg-blue-600 rounded-md transition-colors">
           Log out
         </button>
       </div>

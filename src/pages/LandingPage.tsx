@@ -3,9 +3,6 @@ import { TrashIcon, RecycleIcon, UsersIcon } from "lucide-react";
 const LandingPage = ({
   user
 }) => {
-  // if (user) {
-  //   return <Navigate to={`/${user.role}`} replace />;
-  // }
   return <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-blue-600 shadow-md">

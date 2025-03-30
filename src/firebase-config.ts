@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, updateDoc, getDocs, addDoc, serverTimestamp, doc} from "firebase/firestore";
+import { getFirestore, collection, updateDoc, setDoc, getDocs, addDoc, serverTimestamp, doc} from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getFunctions } from "firebase/functions";
 
@@ -22,6 +22,6 @@ export const auth = getAuth(app);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const functions = getFunctions(app);
-export { collection, addDoc, getDocs, updateDoc, doc, serverTimestamp };
+export { collection, addDoc, getDocs, setDoc, updateDoc, doc, serverTimestamp };
 
 export default app;

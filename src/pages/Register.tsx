@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { RecycleIcon, UserIcon, MailIcon, KeyIcon, MapPinIcon } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebase-config";
 
 const Register = ({
   onRegister,
@@ -43,6 +45,46 @@ const Register = ({
     onRegister(newUser);
     navigate(`/${formData.role}`);
   };
+
+  const handleLoginWithGoogle = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    try {
+      const user = await loginWithGoogle();
+  
+      if (!user) {
+        toast.error("Google Sign-In failed!");
+        return;
+      }
+  
+      // Extract user details from Google
+      const newUser = {
+        id: user.uid,
+        name: user.displayName || "No Name",
+        email: user.email,
+        role: "resident", // Default role (you can update this later)
+        location: "", // Update as needed
+      };
+  
+      // Store user in Firestore if they are new
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+  
+      if (!userSnap.exists()) {
+        await setDoc(userRef, newUser);
+      }
+  
+      toast.success("Login successful!");
+      onRegister(newUser);
+      navigate(`/${newUser.role}`);
+    } catch (error) {
+      console.error("Google login error:", error);
+      toast.error("Something went wrong, please try again.");
+    }
+  };
+  
+
+
   return <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12">
       <div className="max-w-md w-full mx-auto">
         <div className="text-center mb-6">
@@ -139,7 +181,7 @@ const Register = ({
           <div className="mt-4">
             <button
               type="button"
-              onClick={loginWithGoogle}
+              onClick={handleLoginWithGoogle}
               className="group relative w-full flex justify-center py-2 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               <span className="flex items-center">
