@@ -35,17 +35,20 @@ const OfficialDashboard = ({
     icon: <UserIcon size={18} />,
     path: "/official/profile"
   }];
-  useEffect(()=>{
-    console.log(user)
-  }, [])
+  // useEffect(()=>{
+  //   console.log(user)
+  // }, [])
   const getTitle = path => {
     const item = sidebarItems.find(item => item.path === path);
     return item ? item.label : "Dashboard";
   };
   return <div className="flex h-screen bg-gray-50">
-      <Sidebar items={sidebarItems} user={user} onLogout={onLogout} />
+     <div className={`${isMobileMenuOpen ? "block" : "hidden"} fixed inset-0 z-20 bg-gray-600 opacity-50 transition-opacity lg:hidden`} onClick={() => setIsMobileMenuOpen(false)} />
+      <div className={`${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} fixed inset-y-0 left-0 z-30 w-64 transform transition duration-300 ease-in-out lg:static lg:translate-x-0`}>
+        <Sidebar items={sidebarItems} user={user} onLogout={onLogout} />
+      </div>
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Navbar user={user} title={getTitle(window.location.pathname)} />
+        <Navbar user={user} title={getTitle(window.location.pathname)} onMobileMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} isMobileMenuOpen={isMobileMenuOpen} />
         <main className="flex-1 overflow-y-auto bg-gray-50 p-4">
           <Routes>
             <Route path="/" element={<OfficialHome user={user} />} />
